@@ -20,7 +20,7 @@ it('should be able to store a new question', function () {
     ]);
 });
 
-test('after creating a new question I need to make sure that it creates on _draft_ status', function () {
+test('With the creating of the question I need to make sure that it creates on _draft_ status', function () {
     $user = User::factory()->create();
 
     Sanctum::actingAs($user);
@@ -92,4 +92,26 @@ describe('validation rules', function () {
                 'question' => 'already been taken',
             ]);
     });
+});
+
+test('after creating we should return a status 201 with the created question', function () {
+    $user = User::factory()->create();
+
+    Sanctum::actingAs($user);
+
+    $request = postJson(route('questions.store', [
+        'question' => 'Lorem ipsum jeremias?',
+    ]))->assertCreated();
+
+    $question = Question::latest()->first();
+
+    $request->assertJson([
+        'data' => [
+            'id'         => $question->id,
+            'question'   => $question->question,
+            'status'     => $question->status,
+            'created_at' => $question->created_at->format('Y-m-d'),
+            'updated_at' => $question->updated_at->format('Y-m-d'),
+        ],
+    ]);
 });
