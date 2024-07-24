@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Question;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Question\StoreRequest;
+use App\Http\Resources\QuestionResource;
 use App\Models\Question;
-use Illuminate\Http\Response;
 
 class StoreController extends Controller
 {
-    public function __invoke(StoreRequest $request)
+    public function __invoke(StoreRequest $request): QuestionResource
     {
         $question = Question::create([
             'user_id'  => auth()->user()->id,
@@ -17,14 +17,6 @@ class StoreController extends Controller
             'status'   => 'draft',
         ]);
 
-        return response([
-            'data' => [
-                'id'         => $question->id,
-                'question'   => $question->question,
-                'status'     => $question->status,
-                'created_at' => $question->created_at->format('Y-m-d'),
-                'updated_at' => $question->updated_at->format('Y-m-d'),
-            ],
-        ], Response::HTTP_CREATED);
+        return QuestionResource::make($question);
     }
 }
