@@ -9,10 +9,10 @@ use App\Models\Question;
 class StoreController extends Controller
 {
     public function __invoke(StoreRequest $request)
-    {   
+    {
         Question::create([
-            'user_id' => auth()->user()->id,
-            'question' => $request->question
+            'user_id'  => auth()->user()->id,
+            'question' => $request->question,
         ]);
     }
 }
