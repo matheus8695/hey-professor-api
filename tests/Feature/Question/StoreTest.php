@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Models\{Question, User};
 use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\{assertDatabaseHas, postJson};
@@ -71,6 +71,25 @@ describe('validation rules', function () {
         ]))
             ->assertJsonValidationErrors([
                 'question' => 'least 10 characters.',
+            ]);
+    });
+
+    test('question::should be unique', function () {
+        $user = User::factory()->create();
+
+        Question::factory()->create([
+            'question' => 'Lorem ipsum jeremias?',
+            'status'   => 'draft',
+            'user_id'  => $user->id,
+        ]);
+
+        Sanctum::actingAs($user);
+
+        postJson(route('questions.store', [
+            'question' => 'Lorem ipsum jeremias?',
+        ]))
+            ->assertJsonValidationErrors([
+                'question' => 'already been taken',
             ]);
     });
 });
