@@ -31,8 +31,7 @@ test('after creating a new question I need to make sure that it creates on _draf
 
     assertDatabaseHas('questions', [
         'user_id'  => $user->id,
-        'status' => 'draft',
+        'status'   => 'draft',
         'question' => 'Lorem ipsum jeremias?',
     ]);
 });
-
