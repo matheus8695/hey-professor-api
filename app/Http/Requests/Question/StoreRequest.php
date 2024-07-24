@@ -15,7 +15,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question' => ['required', new WithQuestionMark()],
+            'question' => ['required', 'min:10', new WithQuestionMark()],
         ];
     }
 }
