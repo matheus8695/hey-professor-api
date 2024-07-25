@@ -29,7 +29,7 @@ class UpdateRequest extends FormRequest
                 'min:10',
                 new WithQuestionMark(),
                 new onlyAsDraft($question),
-                Rule::unique('questions')->ignore($question->id),
+                Rule::unique('questions')->ignoreModel($question),
             ],
         ];
     }
