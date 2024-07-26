@@ -15,6 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('questions/{question}', Question\UpdateController::class)->name('questions.update');
     Route::delete('question/{question}', Question\DeleteController::class)->name('questions.delete');
     Route::delete('question/{question}/archive', Question\ArchiveController::class)->name('questions.archive');
+    Route::put('questions/{question}/restore', Question\RestoreController::class)->name('questions.restore');
     #endregion
 });
 #endregion
