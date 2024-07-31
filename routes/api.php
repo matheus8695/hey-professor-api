@@ -4,8 +4,10 @@ use App\Http\Controllers\{Auth, Question};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('login', Auth\LoginController::class)->name('login');
-Route::post('register', Auth\RegisterController::class)->name('register');
+Route::middleware(['guest', 'web'])->group(function () {
+    Route::post('login', Auth\LoginController::class)->name('login');
+    Route::post('register', Auth\RegisterController::class)->name('register');
+});
 
 #region Authentication
 Route::middleware('auth:sanctum')->group(function () {
