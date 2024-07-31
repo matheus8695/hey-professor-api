@@ -8,9 +8,10 @@ use function PHPUnit\Framework\assertTrue;
 
 it('should be able to register in application', function () {
     postJson(route('register'), [
-        'name'     => 'Joe Doe',
-        'email'    => 'joe@doe.com',
-        'password' => 'password',
+        'name'               => 'Joe Doe',
+        'email'              => 'joe@doe.com',
+        'email_confirmation' => 'joe@doe.com',
+        'password'           => 'password',
     ])->assertOk();
 
     assertDatabaseHas('users', [
@@ -25,9 +26,10 @@ it('should be able to register in application', function () {
 
 it('should log the new user in the system', function () {
     postJson(route('register'), [
-        'name'     => 'Joe Doe',
-        'email'    => 'joe@doe.com',
-        'password' => 'password',
+        'name'               => 'Joe Doe',
+        'email'              => 'joe@doe.com',
+        'email_confirmation' => 'joe@doe.com',
+        'password'           => 'password',
     ])->assertOk();
 
     $user = User::first();
@@ -50,6 +52,10 @@ describe('validations', function () {
     ]);
 
     test('email', function ($rule, $value, $meta = []) {
+        if ($rule == 'unique') {
+            User::factory()->create(['email' => $value]);
+        }
+
         postJson(route('register'), ['email' => $value])
             ->assertJsonValidationErrors([
                 'email' => __(
@@ -58,10 +64,12 @@ describe('validations', function () {
                 ),
             ]);
     })->with([
-        'required' => ['required', ''],
-        'unique'   => ['min', 'ab', ['min' => 3]],
-        'max:255'  => ['max', str_repeat('*', 256), ['max' => 255]],
-        'email'    => ['email', 'not-email'],
+        'required'  => ['required', ''],
+        'min:3'     => ['min', 'ab', ['min' => 3]],
+        'max:255'   => ['max', str_repeat('*', 256), ['max' => 255]],
+        'email'     => ['email', 'not-email'],
+        'unique'    => ['unique', 'jow@doe.com'],
+        'confirmed' => ['confirmed', 'joe@doe.com'],
     ]);
 
     test('password', function ($rule, $value, $meta = []) {
