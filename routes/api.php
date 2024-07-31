@@ -4,14 +4,15 @@ use App\Http\Controllers\{Auth, Question};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['guest', 'web'])->group(function () {
+    Route::post('login', Auth\LoginController::class)->name('login');
+    Route::post('register', Auth\RegisterController::class)->name('register');
 });
-
-Route::post('register', Auth\RegisterController::class)->name('register');
 
 #region Authentication
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('user', fn (Request $request) => $request->user());
+
     #region Questions
     Route::post('questions', Question\StoreController::class)->name('questions.store');
     Route::put('questions/{question}', Question\UpdateController::class)->name('questions.update');
