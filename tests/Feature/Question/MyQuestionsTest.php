@@ -79,3 +79,15 @@ it('should list only questions that the logged user has been created::archived',
         'question' => $anotherUserQuestion->question,
     ]);
 });
+
+test('making sure that only draft published and archived statuses can be passed to the route', function ($status, $code) {
+    Sanctum::actingAs(User::factory()->create());
+
+    getJson(route('my-questions', ['status' => $status]))
+        ->assertStatus($code);
+})->with([
+    'draft'     => ['draft', 200],
+    'published' => ['published', 200],
+    'archived'  => ['archived', 200],
+    'thing'     => ['thing', 422],
+]);

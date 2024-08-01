@@ -15,7 +15,7 @@ class MyController extends Controller
 
         Validator::validate(
             ['status' => $status],
-            ['status' => 'required', 'in:draft,published,archived']
+            ['status' => ['required', 'in:draft,published,archived']]
         );
 
         $questions = user()
