@@ -29,4 +29,11 @@ class QuestionFactory extends Factory
             'status' => 'draft',
         ]);
     }
+
+    public function archived(): self
+    {
+        return $this->state(fn (array $attributes) => [
+            'deleted_at' => now(),
+        ]);
+    }
 }
