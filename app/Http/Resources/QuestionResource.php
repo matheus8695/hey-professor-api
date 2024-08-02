@@ -19,8 +19,10 @@ class QuestionResource extends JsonResource
                 'id'   => $this->user->id,
                 'name' => $this->user->name,
             ],
-            'updated_at' => $this->updated_at->format('Y-m-d h:i:s'),
-            'created_at' => $this->created_at->format('Y-m-d h:i:s'),
+            'votes_sum_like'   => $this->votes_sum_like ?: 0,
+            'votes_sum_unlike' => $this->votes_sum_unlike ?: 0,
+            'updated_at'       => $this->updated_at->format('Y-m-d h:i:s'),
+            'created_at'       => $this->created_at->format('Y-m-d h:i:s'),
         ];
     }
 }
