@@ -16,10 +16,10 @@ class VoteController extends Controller
         );
 
         $question->votes()
-            ->create([
-                'user_id' => user()->id,
-                $vote     => 1,
-            ]);
+            ->updateOrCreate(
+                ['user_id' => user()->id],
+                [$vote => 1, $vote == 'like' ? 'unlike' : 'like' => 0]
+            );
 
         return response()->noContent();
     }
