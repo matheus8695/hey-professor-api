@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Database\Eloquent\{Builder, Model, SoftDeletes};
 
+/**
+ * @property-read int $votes_sum_like
+ * @property-read int $votes_sum_unlike
+ */
 class Question extends Model
 {
     use HasFactory;
@@ -14,6 +18,11 @@ class Question extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
     }
 
     public function scopePublished(Builder $query): Builder
